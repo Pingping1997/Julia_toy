@@ -1,0 +1,14 @@
+time_limit: 300
+scenarios:
+  baseline:
+    files:
+      cost: data/cost.csv
+      cap: data/cap.csv
+      demand: data/demand.csv
+      arcs: data/arcs.csv
+  optimistic:
+    files:
+      cost: data/cost_opt.csv
+      cap: data/cap.csv
+      demand: data/demand.csv
+      arcs: data/arcs.csv
