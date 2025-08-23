@@ -12,3 +12,9 @@ scenarios:
       cap: data/cap.csv
       demand: data/demand.csv
       arcs: data/arcs.csv
+  conservative:
+    files:
+      cost: data/cost_con.csv
+      cap: data/cap.csv
+      demand: data/demand.csv
+      arcs: data/arcs.csv
