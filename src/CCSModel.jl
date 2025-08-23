@@ -1,4 +1,3 @@
-
 module CCSModel
 
 using JuMP, HiGHS, DataFrames, CSV, YAML
@@ -9,12 +8,11 @@ include("solve_report.jl")
 export run
 
 """
-    run(scen::AbstractString="baseline"; cfg_path="config/model.yml")
+    run(scen::AbstractString="baseline"; cfg_path="config/model.yml", outdir_base="results")
 
-Load data for `scen` from YAML config, build and solve the JuMP model, and write results.
+Load data for `scen`, build & solve, and write results to `outdir_base/<scen>/`.
 """
-function run(scen::AbstractString="baseline"; cfg_path::AbstractString="config/model.yml")
-
+function run(scen::AbstractString="baseline"; cfg_path::AbstractString="config/model.yml", outdir_base::AbstractString="results")
     cfg = YAML.load_file(cfg_path)
     @assert haskey(cfg, "scenarios") "Config must have a 'scenarios' key"
     @assert haskey(cfg["scenarios"], scen) "Scenario $(scen) not found in config"
@@ -40,8 +38,9 @@ function run(scen::AbstractString="baseline"; cfg_path::AbstractString="config/m
     m = build_model(I, J, Arcs, c, cap, dem; time_limit = get(cfg, "time_limit", 600))
     optimize!(m)
 
-    # --- Summarize & write ---
-    summarize_and_write(m, I, J, Arcs; outdir = joinpath(@__DIR__, "..", "results"))
+    # --- Summarize & write (results/<scenario>/...) ---
+    outdir = joinpath(outdir_base, scen)
+    summarize_and_write(m, I, J, Arcs; outdir=outdir, scenario=scen)
 
     return m
 end
